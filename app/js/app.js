@@ -103,7 +103,7 @@ app.controller('RegisterCtrl', function($scope,$location,UserService, Authentica
                 });
         };
 });
-app.run(function run($rootScope, $location, $cookies, $http) {
+app.run(function run($rootScope, $location, $cookies, $http,$anchorScroll) {
         // keep user logged in after page refresh
 		if ($location.path() == '/login') {
 				$rootScope.hideit = false;
@@ -122,6 +122,9 @@ app.run(function run($rootScope, $location, $cookies, $http) {
             if (restrictedPage && !loggedIn) {
                 $location.path('/login');
             }
+        });
+		 $rootScope.$on("$locationChangeSuccess", function(){
+            $anchorScroll();
         });
     });
 
