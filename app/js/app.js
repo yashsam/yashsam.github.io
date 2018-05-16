@@ -4,21 +4,21 @@ var app = angular.module("app", ["ngRoute", "ngAnimate","ngCookies"]);
 app.config(function($routeProvider,$locationProvider) {
 	$routeProvider
 		.when("/home", {
-			templateUrl: "app/home.html",
+			templateUrl: "./app/home.html",
 			controller: "HomeCtrl",
             controllerAs: 'vm'
 		})
 		.when("/tables", {
-			templateUrl: "app/html-table.html",
+			templateUrl: "./app/html-table.html",
 			controller: "TableCtrl",
             controllerAs: 'vm'
 		})
 		.when("/login", {
-			templateUrl: "app/login.html",
+			templateUrl: "./app/login.html",
 			controller: "LoginCtrl",
 			controllerAs: 'vm'
 		}).when("/register", {
-			templateUrl: "app/register.html",
+			templateUrl: "./app/register.html",
 			controller: "RegisterCtrl",
 			controllerAs: 'vm'
 		})
@@ -29,29 +29,37 @@ app.config(function($routeProvider,$locationProvider) {
 app.controller('HomeCtrl', function($scope,$timeout,$location){
     var vm = this;
     vm.dataLoading = true;
-	//$rootScope.hideit = true;
+	
     $timeout( function(){
             vm.dataLoading = false;
         }, 2000 );
     $scope.getClass = function (path) {
   return ($location.path().substr(0, path.length) === path) ? 'navigation__active' : '';
+
 }
+ $(window).on("scroll", function() {
+                $(window).scrollTop() >= 20 ? $(".header").addClass("header--scrolled") : $(".header").removeClass("header--scrolled")
+            });
     
 });
 app.controller('TableCtrl', function($scope,$timeout,$location){
     var vm = this;
     vm.dataLoading = true;
-    //$rootScope.hideit = true;
+    
     $timeout( function(){
             vm.dataLoading = false;
         }, 2000 );
     $scope.getClass = function (path) {
   return ($location.path().substr(0, path.length) === path) ? 'navigation__active' : '';
 }
+
+ $(window).on("scroll", function() {
+                $(window).scrollTop() >= 20 ? $(".header").addClass("header--scrolled") : $(".header").removeClass("header--scrolled")
+            });
  
 });
 app.controller('LoginCtrl', function($scope,$location, AuthenticationService, FlashService){
-	//$rootScope.hideit = false;
+	$scope.hideit  = true;
 	var vm = this;
 
         vm.login = login;
@@ -78,7 +86,7 @@ app.controller('LoginCtrl', function($scope,$location, AuthenticationService, Fl
 		
 });
 app.controller('RegisterCtrl', function($scope,$location,UserService, AuthenticationService, FlashService){
-	//$rootScope.hideit = false;
+	$scope.hideit = true;
 	var vm = this;
 
        
@@ -105,10 +113,11 @@ app.controller('RegisterCtrl', function($scope,$location,UserService, Authentica
 });
 app.run(function run($rootScope, $location, $cookies, $http,$anchorScroll) {
         // keep user logged in after page refresh
+        $rootScope.hideit =false;
 		if ($location.path() == '/login') {
-				$rootScope.hideit = false;
-		}else{
 				$rootScope.hideit = true;
+		}else{
+				$rootScope.hideit = false;
 		}
         $rootScope.globals = $cookies.getObject('globals') || {};
         if ($rootScope.globals.currentUser) {
@@ -123,9 +132,14 @@ app.run(function run($rootScope, $location, $cookies, $http,$anchorScroll) {
                 $location.path('/login');
             }
         });
-		 $rootScope.$on("$locationChangeSuccess", function(){
-            $anchorScroll();
+         $rootScope.$on('$locationChangeSuccess', function (event, next, current) {
+                $(window).scrollTop(0);
+                $('aside').removeClass("toggled");
+                $('body').removeClass("aside-toggled");
+
+            
         });
+         console.log('Root Scope : '+$rootScope.hideit);
     });
 
 $(window).on("load", function() {
