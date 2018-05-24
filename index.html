@@ -19,7 +19,7 @@
 
     <body data-sa-theme="2" >
         <main class="main">
-                         
+                    <div class="toast__msg"></div>     
             <section class="content" ng-view>
             </section>
             <section>
@@ -36,11 +36,40 @@
                         <a class="nav-link" href="#">News</a>
 
                         <a class="nav-link" href="#">Contacts</a>
+						<div class="fab fab__push">
+        <div class="fab__ripple"></div>
+        <i class="zmdi zmdi-notifications fab__image"></i>
+        
+      </div>
                     </ul>
                 </footer>
             </section>
             
         </main>
+<div id="send-push" ><h1>CLICK HERE TO SEND NOTIFICATION</h1></div>
+<!-- Container for the Table of content -->
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+        <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+          <!-- div to display the generated Instance ID token -->
+          <div id="token_div" style="display: none;">
+            <h4>Instance ID Token</h4>
+            <p id="token" style="word-break: break-all;"></p>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    onclick="deleteToken()">Delete Token</button>
+          </div>
+          <!-- div to display the UI to allow the request for permission to
+               notify the user. This is shown if the app has not yet been
+               granted permission to notify. -->
+          <div id="permission_div" style="display: none;">
+            <h4>Needs Permission</h4>
+            <p id="token"></p>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    onclick="requestPermission()">Request Permission</button>
+          </div>
+          <!-- div to display messages received by this app. -->
+          <div id="messages"></div>
+        </div>
+      </div>
 
         <!-- Older IE warning message -->
             <!--[if IE]>
@@ -110,11 +139,31 @@
 	<script src="https://code.angularjs.org/1.6.0/angular-animate.js"></script>
 	<script src="https://code.angularjs.org/1.6.0/angular-cookies.min.js"></script>
         <!-- App functions and actions -->
+<script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-messaging.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AAAAfmWCvpA:APA91bHu9gbWqvMuQwcWWkxxAzp-SmyGCa_lgs0xGGn478XIv1qDAEQIbNiuRZ39GM5zE4w9tr-XZwBJJUleAj4mqrg9QU1NvjX1koq6esQNrsyBX4fgV8QyEHUBvTGa3iDlylmSQ0VR",
+    authDomain: "gsm-demo-project.firebaseapp.com",
+    databaseURL: "https://gsm-demo-project.firebaseio.com",
+    projectId: "gsm-demo-project",
+    storageBucket: "gsm-demo-project.appspot.com",
+    messagingSenderId: "103953800507"//"542868946576"
+  };
+  firebase.initializeApp(config);
+  // Retrieve Firebase Messaging object.
+
+</script>
         <script src="app/js/app.js"></script>
 		 <script src="app/services/authentication.service.js"></script>
 		<script src="app/services/flash.service.js"></script>
 		<script src="app/services/user.service.local-storage.js"></script>
 		<script src="app/js/main.js"></script>
+ <script src="app/js/push.js"></script>
+        
+        <script src="app/js/toast.js"></script>
     </body>
 
 <!-- Mirrored from byrushan.com/projects/super-admin/app/2.1.2/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 Apr 2018 07:42:33 GMT -->
