@@ -1,31 +1,111 @@
 "use strict";
 
-var app = angular.module("app", ["ngRoute", "ngAnimate","ngCookies"]);
-app.config(function($routeProvider,$locationProvider) {
-	$routeProvider
-		.when("/home", {
-			templateUrl: "./app/home.html",
-			controller: "HomeCtrl",
+var app = angular.module("app", ["ui.router","oc.lazyLoad","ngAnimate","ngCookies"]);
+app.config(function($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
+	$stateProvider
+        .state("app",{
+            abstract: true,
+            templateUrl: './app/full.html',
+            resolve: {
+              loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                // you can lazy load controllers
+                return $ocLazyLoad.load({
+                  files: ['app/js/push.js']
+                });
+              }]
+            }
+            
+        })
+        .state("appSimple",{
+            abstract: true,
+            templateUrl: './app/simple.html'
+        })
+        
+        .state("app.home", {
+            url:"/home",
+            templateUrl: "./app/home.html",
+            controller: "HomeCtrl",
             controllerAs: 'vm'
-		})
-		.when("/tables", {
-			templateUrl: "./app/html-table.html",
-			controller: "TableCtrl",
+            
+        })
+        .state("app.tables", {
+            url:"/tables",
+            templateUrl: "./app/html-table.html",
+            controller: "TableCtrl",
             controllerAs: 'vm'
-		})
-		.when("/login", {
-			templateUrl: "./app/login.html",
-			controller: "LoginCtrl",
-			controllerAs: 'vm'
-		}).when("/register", {
-			templateUrl: "./app/register.html",
-			controller: "RegisterCtrl",
-			controllerAs: 'vm'
-		})
-		.otherwise({
-			redirectTo: "/home"
-		});
+        })
+        .state("app.typo", {
+            url:"/typo",
+            templateUrl: "./app/typography.html",
+            controller: "TableCtrl",
+            controllerAs: 'vm'
+        })
+        .state("appSimple.login", {
+            url:"/login",
+            templateUrl: "./app/login.html",
+            controller: "LoginCtrl",
+            controllerAs: 'vm'
+        }).state("appSimple.register", {
+            url:"/register",
+            templateUrl: "./app/register.html",
+            controller: "RegisterCtrl",
+            controllerAs: 'vm'
+        });
+        $urlRouterProvider.otherwise('/home');
 });
+app.controller('NotificationCtrl',function($scope,$timeout,$location){
+    var serverkey = 'AAAAfmWCvpA:APA91bHu9gbWqvMuQwcWWkxxAzp-SmyGCa_lgs0xGGn478XIv1qDAEQIbNiuRZ39GM5zE4w9tr-XZwBJJUleAj4mqrg9QU1NvjX1koq6esQNrsyBX4fgV8QyEHUBvTGa3iDlylmSQ0VR';
+    var publickey = 'BLTsx4emyHsflgGZf_OZqjj0qRX1vKR0CYIE3UfMuTj7ALdDLZ0gZOswuLn7bKtHOjdywuwx8HfrDAvm2RqAyao';
+
+$scope.sendPushNotification = function () {
+        var notification = {
+    'title': 'Portugal vs. Denmark',
+    'body': '5 to 1',
+    'icon': 'firebase-logo.png',
+    'click_action': 'http://localhost:8081'
+    };
+   
+    navigator.serviceWorker.ready
+      .then(function(registration) {
+        //Get `push subscription`
+        registration.pushManager.getSubscription().then(function (subscription) {
+        console.log('Token : '+token);
+       
+       
+          //Send `push notification` - source for below url `server.js`
+          fetch('https://fcm.googleapis.com/fcm/send', {
+          'method': 'POST',
+          'headers': {
+            'Authorization': 'key='+serverkey,
+            'Content-Type': 'application/json'
+          },
+          'body': JSON.stringify({
+            'notification': notification,
+            'to': token
+          })
+        }).then(function(response) {
+          console.log(response);
+        }).catch(function(error) {
+          console.error(error);
+        })
+          /*fetch('/send_notification', {
+            method: 'post',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(subscription)
+          })
+          .then(function(response) {
+            console.log(response);
+            return response.json();
+          })*/
+        })
+      })
+        // jQuery stuff
+    }
+});
+
 app.controller('HomeCtrl', function($scope,$timeout,$location){
     var vm = this;
     vm.dataLoading = true;

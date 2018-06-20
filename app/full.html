@@ -1,0 +1,54 @@
+<main class="main">
+                    <div class="toast__msg"></div>
+            <div ng-include="'app/sidebar.html'"></div>        
+            <section class="content">
+                 <ui-view></ui-view>
+            </section>
+
+            <section>
+            <footer class="footer">
+                    <p>© Super Admin Responsive. All rights reserved.</p>
+
+                    <ul class="nav footer__nav">
+                        <a class="nav-link" href="#">Homepage</a>
+
+                        <a class="nav-link" href="#">Company</a>
+
+                        <a class="nav-link" href="#">Support</a>
+
+                        <a class="nav-link" href="#">News</a>
+                        <div class="fab fab__push">
+        <div class="fab__ripple"></div>
+        <i class="zmdi zmdi-notifications fab__image"></i>
+        
+      </div>
+                        <a class="nav-link" href="#">Contacts</a>
+                    </ul>
+                </footer>
+            </section>
+            
+</main>
+<div id="send-push" ng-click="sendPushNotification();" ng-controller="NotificationCtrl"><h1>CLICK HERE TO SEND NOTIFICATION</h1></div>
+<!-- Container for then Table of content -->
+      <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+        <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+          <!-- div to display the generated Instance ID token -->
+          <div id="token_div" style="display: none;">
+            <h4>Instance ID Token</h4>
+            <p id="token" style="word-break: break-all;"></p>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    onclick="deleteToken()">Delete Token</button>
+          </div>
+          <!-- div to display the UI to allow the request for permission to
+               notify the user. This is shown if the app has not yet been
+               granted permission to notify. -->
+          <div id="permission_div" style="display: none;">
+            <h4>Needs Permission</h4>
+            <p id="token"></p>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    onclick="requestPermission()">Request Permission</button>
+          </div>
+          <!-- div to display messages received by this app. -->
+          <div id="messages"></div>
+        </div>
+      </div>

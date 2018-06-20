@@ -198,12 +198,7 @@ navigator.serviceWorker.ready
         //Get `push subscription`
         registration.pushManager.getSubscription().then(function (subscription) {
           console.log('Token : '+token);
-          console.log(subscription.endpoint);
-            var temp = subscription.endpoint.split('/');
-            var regTokens = [temp[temp.length - 1]];  
-            if(!token){
-              token = regTokens[0];
-            }
+          
           //Send `push notification` - source for below url `server.js`
           fetch('https://fcm.googleapis.com/fcm/send', {
           'method': 'POST',
@@ -232,7 +227,6 @@ navigator.serviceWorker.ready
             console.log(response);
             return response.json();
           })*/
-
         })
       })
   }
