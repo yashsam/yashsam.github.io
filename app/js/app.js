@@ -208,15 +208,18 @@ app.run(function run($rootScope, $location, $cookies, $http,$anchorScroll) {
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			function onBackKeyDown(e) {
 				e.preventDefault();
-				if ($location.path() === "/login" || $location.path() === "/home") {
+				if ($location.path() === "/login" || $location.path() === "/") {
 					var r=confirm("exit");
 					if(r==true){
+						alert('confirm true');
 						console.log("not exit");
 						navigator.app.exitApp();
 					}else {
+						alert('confirm false');
 						navigator.app.goBack();
 					}
 				}else {
+					alert('else alert');
 					/* $ionicHistory.goBack(); */
 					window.history.back();
 					navigator.app.goBack();
