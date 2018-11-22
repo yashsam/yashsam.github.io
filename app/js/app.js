@@ -199,6 +199,36 @@ app.run(function run($rootScope, $location, $cookies, $http,$anchorScroll) {
 		}else{
 				$rootScope.hideit = false;
 		}
+		
+		
+		//########################
+	
+		document.addEventListener("deviceready", function() {
+			console.log("deviceready");
+			document.addEventListener("backbutton", onBackKeyDown, false);
+			function onBackKeyDown(e) {
+				e.preventDefault();
+				if ($location.path() === "/login" || $location.path() === "/home") {
+					var r=confirm("exit");
+					if(r==true){
+						console.log("not exit");
+						navigator.app.exitApp();
+					}else {
+						navigator.app.goBack();
+					}
+				}else {
+					/* $ionicHistory.goBack(); */
+					window.history.back();
+					navigator.app.goBack();
+				}
+			}
+		}, 100);
+				
+		//########################
+		
+		
+		
+		
         $rootScope.globals = $cookies.getObject('globals') || {};
         if ($rootScope.globals.currentUser) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata;
