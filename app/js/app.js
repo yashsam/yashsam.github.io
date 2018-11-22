@@ -204,9 +204,10 @@ app.run(function run($rootScope, $location, $cookies, $http,$anchorScroll) {
 		//########################
 	
 		document.addEventListener("deviceready", function() {
-			console.log("deviceready");
+			alert('on device ready');
 			document.addEventListener("backbutton", onBackKeyDown, false);
 			function onBackKeyDown(e) {
+				alert('backbutton clicked');
 				e.preventDefault();
 				if ($location.path() === "/login" || $location.path() === "/") {
 					var r=confirm("exit");
